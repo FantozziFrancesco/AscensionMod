@@ -1,0 +1,12 @@
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "name": "Unified Size",
+    "attribute": "minecraft:generic.scale",
+    "value": {
+      "type": "origins:resource",
+      "resource": "ascensionmod:origin_size"
+    },
+    "operation": "multiply_total"
+  }
+}

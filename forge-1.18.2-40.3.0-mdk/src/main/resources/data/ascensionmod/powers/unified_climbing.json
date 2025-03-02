@@ -1,0 +1,11 @@
+{
+  "type": "origins:climbing",
+  "condition": {
+    "type": "origins:collided_horizontally"
+  },
+  "allow_holding": true,
+  "height": {
+    "type": "origins:resource",
+    "resource": "ascensionmod:origin_climbing_height"
+  }
+}

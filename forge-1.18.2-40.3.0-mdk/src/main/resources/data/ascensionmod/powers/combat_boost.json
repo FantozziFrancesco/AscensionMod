@@ -1,0 +1,31 @@
+{
+  "type": "origins:active_self",
+  "key": {
+    "key": "key.ascensionmod.combat_boost",
+    "continuous": false
+  },
+  "cooldown": 600,
+  "hud_render": {
+    "should_render": false
+  },
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effects": [
+      {
+        "effect": "minecraft:resistance",
+        "duration": 200,
+        "amplifier": 1
+      },
+      {
+        "effect": "minecraft:strength",
+        "duration": 200,
+        "amplifier": 0
+      },
+      {
+        "effect": "minecraft:slowness",
+        "duration": 200,
+        "amplifier": 0
+      }
+    ]
+  }
+}

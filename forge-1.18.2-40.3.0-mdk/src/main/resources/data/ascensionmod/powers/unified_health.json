@@ -1,0 +1,12 @@
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "name": "Unified Health",
+    "attribute": "minecraft:generic.max_health",
+    "value": {
+      "type": "origins:resource",
+      "resource": "ascensionmod:origin_health"
+    },
+    "operation": "addition"
+  }
+}

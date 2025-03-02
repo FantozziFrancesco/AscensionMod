@@ -1,0 +1,12 @@
+{
+  "type": "origins:modify_damage_taken",
+  "damage_condition": {
+    "type": "origins:name",
+    "name": "fall"
+  },
+  "modifier": {
+    "name": "Feather Falling",
+    "operation": "multiply_total",
+    "value": -0.33 // Reduces fall damage by 33% (adjust as needed)
+  }
+}

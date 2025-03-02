@@ -1,0 +1,12 @@
+{
+  "item.minecraft.potion.effect.potion_of_ascension": "Potion of Ascension",
+  "item.minecraft.splash_potion.effect.potion_of_ascension": "Splash Potion of Ascension",
+  "item.minecraft.lingering_potion.effect.potion_of_ascension": "Lingering Potion of Ascension",
+
+  "item.ascensionmod.potion_of_ascension": "Potion of Ascension",
+  "item.ascensionmod.homing_potion": "Homing Potion",
+
+  "key.ascensionmod.wall_jump": "Wall Jump",
+  "key.ascensionmod.combat_boost": "Combat Boost",
+  "category.ascensionmod.origins": "Ascension Mod"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "origins:effect",
+  "effect": {
+    "type": "origins:resource",
+    "resource": "ascensionmod:origin_perpetual_effect"
+  },
+  "duration": 2147483647,
+  "amplifier": 0,
+  "is_ambient": false,
+  "show_particles": false,
+  "show_icon": true
+}

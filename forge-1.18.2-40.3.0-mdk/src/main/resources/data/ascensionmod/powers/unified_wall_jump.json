@@ -1,0 +1,18 @@
+{
+  "type": "origins:active_self",
+  "key": {
+    "key": "key.ascensionmod.wall_jump",
+    "continuous": false
+  },
+  "cooldown": 0,
+  "hud_render": {
+    "should_render": false
+  },
+  "entity_action": {
+    "type": "origins:apply_velocity",
+    "velocity": {
+      "type": "origins:resource",
+      "resource": "ascensionmod:origin_wall_jump_velocity"
+    }
+  }
+}
