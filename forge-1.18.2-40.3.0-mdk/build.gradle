@@ -1,99 +1,53 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '5.1.41' // ForgeGradle for Minecraft 1.18.2
 }
 
-version = "${mod_version}"
-group = "${mod_group_id}" // This is where mod_group_id is used
-archivesBaseName = "${mod_id}"
+version = '1.0'
+group = 'com.example.ascensionmod'
+archivesBaseName = 'ascensionmod'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-minecraft {
-    mappings channel: 'official', version: "${minecraft_version}"
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Java 17 for Minecraft 1.18.2
 
 repositories {
     maven {
-        url "https://jitpack.io/" // JitPack repository (if the library is published here)
+        url = 'https://jitpack.io' // Repository for Forge Origins, Apoli, and Calio
     }
     maven {
-        url "https://maven.minecraftforge.net/" // Forge repository
+        url = 'https://maven.minecraftforge.net/' // Forge repository
     }
-    mavenCentral()
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation 'com.github.apace100:origins-forge:ef51e7e798'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.3.0' // Forge dependency for Minecraft 1.18.2
+    implementation fg.deobf("com.github.apace100:origins-forge:1.18.2-1.5.0") // Forge Origins dependency
+    implementation fg.deobf("com.github.apace100:apoli-forge:2.3.4") // Forge Apoli dependency
+    implementation fg.deobf("com.github.apace100:calio-forge:1.6.0") // Forge Calio dependency
 }
 
-processResources {
-    filesMatching("META-INF/mods.toml") {
-        expand project.properties
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title": "${mod_id}",
-                "Specification-Vendor": "${mod_authors}",
-                "Specification-Version": "1",
-                "Implementation-Title": "${mod_name}",
-                "Implementation-Version": "${mod_version}",
-                "Implementation-Vendor": "${mod_authors}",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
+minecraft {
+    mappings channel: 'official', version: '1.18.2'
+    runs {
+        client {
+            workingDirectory = file('run') // Set the working directory explicitly
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                ascensionmod {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory = file('run') // Set the working directory explicitly
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                ascensionmod {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }

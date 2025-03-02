@@ -68,6 +68,8 @@ public class AscensionMod {
 
         // Register Forge event bus
         MinecraftForge.EVENT_BUS.register(this);
+
+        ModOrigins.registerOrigins();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
