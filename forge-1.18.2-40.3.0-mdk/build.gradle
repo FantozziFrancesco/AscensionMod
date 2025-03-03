@@ -1,32 +1,79 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
+    }
+}
+
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '1.0'
-group = 'com.example.ascensionmod'
-archivesBaseName = 'ascensionmod'
+apply plugin: 'net.minecraftforge.gradle' // Apply ForgeGradle first
+apply plugin: 'org.parchmentmc.librarian.forgegradle' // Apply Librarian after ForgeGradle
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, 'ascensionmod.refmap.json'
+}
+
+version = project.mod_version
+group = project.maven_group
+archivesBaseName = project.archives_base_name
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: "parchment", version: "${project.mappings_version}"
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
         client {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
+
+            args '-mixin.debug=true', '-mixin.debug.export=true', '-mixin.config=ascensionmod.mixins.json'
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+
             mods {
                 ascensionmod {
                     source sourceSets.main
                 }
             }
         }
+
         server {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
+
+            args '-mixin.debug=true', '-mixin.debug.export=true', '-mixin.config=ascensionmod.mixins.json'
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+
+            mods {
+                ascensionmod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'ascensionmod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
             mods {
                 ascensionmod {
                     source sourceSets.main
@@ -34,28 +81,82 @@ minecraft {
             }
         }
     }
+}
+
+sourceSets.main.resources {
+    srcDirs += 'src/generated/resources'
 }
 
 repositories {
-    mavenCentral()
     maven {
-        url = "https://maven.minecraftforge.net/"
+        url = 'https://maven.minecraftforge.net' // Forge Maven
     }
     maven {
-        url = "https://jitpack.io" // For Origins API dependencies
+        url = 'https://maven.parchmentmc.org' // Parchment Mappings
     }
+    maven {
+        url 'https://maven.theillusivec4.top' // Origins-Forge API
+    }
+    maven {
+        url "https://cursemaven.com" // Optional: For additional mod dependencies
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    mavenCentral() // General Maven Repository
 }
 
 dependencies {
-    // Forge dependency
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    // Minecraft and Forge
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    // Origins API dependency
-    implementation fg.deobf('com.github.EdwinMindcraft:origins-architectury:1.18.2-1.5.0.2')
+    // Origins-Forge API (from CurseForge)
+    implementation fg.deobf("curse.maven:origins-474438:${origins_version}")
 
-    // Calio dependency
-    implementation fg.deobf('com.github.EdwinMindcraft:calio:1.18.1-1.4')
+    // Optional: Add other dependencies here
+    // Example: implementation fg.deobf("curse.maven:jei-238222:${jei_version}") // Just Enough Items
 
-    // Apoli dependency
-    implementation fg.deobf('com.github.EdwinMindcraft:apoli:1.18.1-2.2')
+    // Mixin Annotation Processor
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand 'version': project.version,
+                'mc_requirements': project.mc_requirements,
+                'forge_requirements': project.forge_requirements,
+                'origins_requirements': project.origins_requirements
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.mod_id,
+                "Implementation-Version"  : project.mod_version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : 'ascensionmod.mixins.json'
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
 }

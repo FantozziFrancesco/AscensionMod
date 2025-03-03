@@ -10,38 +10,39 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.effect.StatusEffectInstance;
-import net.minecraft.world.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class ModOrigins {
-    // Define origin IDs
     public static final ResourceLocation ORIGIN_CRAWLER = new ResourceLocation("ascensionmod", "crawler");
     public static final ResourceLocation ORIGIN_CHASM_HOPPER = new ResourceLocation("ascensionmod", "chasm_hopper");
     public static final ResourceLocation ORIGIN_SCALED_ONE = new ResourceLocation("ascensionmod", "scaled_one");
 
-    // Register origins
     public static void registerOrigins() {
         OriginRegistry.register(ORIGIN_CRAWLER, createCrawlerOrigin());
         OriginRegistry.register(ORIGIN_CHASM_HOPPER, createChasmHopperOrigin());
         OriginRegistry.register(ORIGIN_SCALED_ONE, createScaledOneOrigin());
     }
 
-    // Load JSON data for an origin
     private static JsonObject loadOriginData(ResourceLocation originId) {
         try {
-            String path = "data/ascensionmod/origins/" + originId.getPath() + ".json";
-            return JsonParser.parseReader(new FileReader(path)).getAsJsonObject();
+            InputStream stream = Minecraft.getInstance().getResourceManager().getResource(
+                    new ResourceLocation(originId.getNamespace(), "origins/" + originId.getPath() + ".json")
+            ).getInputStream();
+            return JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
         } catch (Exception e) {
-            e.printStackTrace();
+            AscensionMod.LOGGER.error("Failed to load origin data for " + originId, e);
             return null;
         }
     }
 
-    // Create the Crawler origin
     private static Origin createCrawlerOrigin() {
         JsonObject data = loadOriginData(ORIGIN_CRAWLER);
         if (data == null) return null;
@@ -54,12 +55,12 @@ public class ModOrigins {
                     @Override
                     public void onAdded() {
                         // Apply Weakness effect
-                        player.addEffect(new StatusEffectInstance(
-                                StatusEffects.WEAKNESS, // Weakness effect
-                                Integer.MAX_VALUE,      // Infinite duration
-                                0,                     // Amplifier (level 1)
-                                false,                 // No particles
-                                false                  // No icon
+                        player.addEffect(new MobEffectInstance(
+                                MobEffects.WEAKNESS, // Weakness effect
+                                Integer.MAX_VALUE,   // Infinite duration
+                                0,                  // Amplifier (level 1)
+                                false,              // No particles
+                                false               // No icon
                         ));
 
                         // Adjust size
@@ -73,13 +74,12 @@ public class ModOrigins {
                         // Apply perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.addEffect(new StatusEffectInstance(
-                                    StatusEffect.byName(effectName),
-                                    Integer.MAX_VALUE, // Infinite duration
-                                    0,                // Amplifier (level 1)
-                                    false,            // No particles
-                                    false             // No icon
-                            ));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.addEffect(new MobEffectInstance(effectInstance, Integer.MAX_VALUE, 0, false, false));
+                            } else {
+                                AscensionMod.LOGGER.warn("Unknown effect: " + effectName);
+                            }
                         });
 
                         // Initialize climbing
@@ -89,7 +89,7 @@ public class ModOrigins {
                     @Override
                     public void onRemoved() {
                         // Remove Weakness effect
-                        player.removeEffect(StatusEffects.WEAKNESS);
+                        player.removeEffect(MobEffects.WEAKNESS);
 
                         // Reset size
                         player.setScale(1.0f);
@@ -100,7 +100,10 @@ public class ModOrigins {
                         // Remove perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.removeEffect(StatusEffect.byName(effectName));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.removeEffect(effectInstance);
+                            }
                         });
                     }
 
@@ -127,7 +130,6 @@ public class ModOrigins {
                 .build();
     }
 
-    // Create the Chasm Hopper origin
     private static Origin createChasmHopperOrigin() {
         JsonObject data = loadOriginData(ORIGIN_CHASM_HOPPER);
         if (data == null) return null;
@@ -140,13 +142,13 @@ public class ModOrigins {
 
                     @Override
                     public void onAdded() {
-                        // Apply Feather Falling effect
-                        player.addEffect(new StatusEffectInstance(
-                                StatusEffects.SLOW_FALLING, // Feather Falling effect
-                                Integer.MAX_VALUE,          // Infinite duration
-                                0,                         // Amplifier (level 1)
-                                false,                     // No particles
-                                false                      // No icon
+                        // Apply Slow Falling effect
+                        player.addEffect(new MobEffectInstance(
+                                MobEffects.SLOW_FALLING, // Slow Falling effect
+                                Integer.MAX_VALUE,       // Infinite duration
+                                0,                      // Amplifier (level 1)
+                                false,                  // No particles
+                                false                   // No icon
                         ));
 
                         // Adjust size
@@ -160,13 +162,12 @@ public class ModOrigins {
                         // Apply perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.addEffect(new StatusEffectInstance(
-                                    StatusEffect.byName(effectName),
-                                    Integer.MAX_VALUE, // Infinite duration
-                                    0,                // Amplifier (level 1)
-                                    false,            // No particles
-                                    false             // No icon
-                            ));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.addEffect(new MobEffectInstance(effectInstance, Integer.MAX_VALUE, 0, false, false));
+                            } else {
+                                AscensionMod.LOGGER.warn("Unknown effect: " + effectName);
+                            }
                         });
 
                         // Initialize wall jumping
@@ -175,8 +176,8 @@ public class ModOrigins {
 
                     @Override
                     public void onRemoved() {
-                        // Remove Feather Falling effect
-                        player.removeEffect(StatusEffects.SLOW_FALLING);
+                        // Remove Slow Falling effect
+                        player.removeEffect(MobEffects.SLOW_FALLING);
 
                         // Reset size
                         player.setScale(1.0f);
@@ -187,7 +188,10 @@ public class ModOrigins {
                         // Remove perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.removeEffect(StatusEffect.byName(effectName));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.removeEffect(effectInstance);
+                            }
                         });
                     }
 
@@ -222,14 +226,13 @@ public class ModOrigins {
                 .build();
     }
 
-    // Create the Scaled One origin
     private static Origin createScaledOneOrigin() {
         JsonObject data = loadOriginData(ORIGIN_SCALED_ONE);
         if (data == null) return null;
 
         return Origin.builder(ORIGIN_SCALED_ONE)
                 .addPower(new PowerFactory<>(ORIGIN_SCALED_ONE, data -> (type, player) -> new Power(type, player) {
-                    private static final UUID COMBAT_BOOST_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
+                    private static final UUID COMBAT_BOOST_ID = UUID.randomUUID();
 
                     @Override
                     public void onAdded() {
@@ -254,13 +257,12 @@ public class ModOrigins {
                         // Apply perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.addEffect(new StatusEffectInstance(
-                                    StatusEffect.byName(effectName),
-                                    Integer.MAX_VALUE, // Infinite duration
-                                    0,                // Amplifier (level 1)
-                                    false,            // No particles
-                                    false             // No icon
-                            ));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.addEffect(new MobEffectInstance(effectInstance, Integer.MAX_VALUE, 0, false, false));
+                            } else {
+                                AscensionMod.LOGGER.warn("Unknown effect: " + effectName);
+                            }
                         });
                     }
 
@@ -278,7 +280,10 @@ public class ModOrigins {
                         // Remove perpetual effects
                         data.getAsJsonArray("perpetual_effects").forEach(effect -> {
                             String effectName = effect.getAsString();
-                            player.removeEffect(StatusEffect.byName(effectName));
+                            MobEffects effectInstance = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(effectName));
+                            if (effectInstance != null) {
+                                player.removeEffect(effectInstance);
+                            }
                         });
                     }
                 }))

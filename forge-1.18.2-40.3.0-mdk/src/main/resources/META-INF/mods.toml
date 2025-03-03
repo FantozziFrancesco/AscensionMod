@@ -5,61 +5,47 @@ license="MIT"
 issueTrackerURL="https://github.com/YourUsername/YourMod/issues"
 
 [[mods]]
-modId="yourmod"
+modId="ascensionmod" # Updated to match your mod's ID
 version="1.0.0"
-displayName="Your Mod"
-logoFile="yourmod_icon.png"
+displayName="Ascension Mod"
+logoFile="ascensionmod_icon.png"
 authors="YourUsername"
 description='''
-This is your custom mod that adds new features to the game.
+This mod adds new potions, origins, and teleportation mechanics to the game.
 '''
 
 # Dependencies
-[[dependencies.yourmod]]
+[[dependencies.ascensionmod]]
 modId="forge"
 mandatory=true
-versionRange="[40.2.3,)"
+versionRange="[40.3.0,)" # Updated to match your Forge version
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.yourmod]]
+[[dependencies.ascensionmod]]
 modId="minecraft"
 mandatory=true
 versionRange="[1.18.2]"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.yourmod]]
+[[dependencies.ascensionmod]]
 modId="origins"
 mandatory=true
-versionRange="[1.18.2-1.5.0.2,)"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.yourmod]]
-modId="calio"
-mandatory=true
-versionRange="[1.18.1-1.4,)"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.yourmod]]
-modId="apoli"
-mandatory=true
-versionRange="[1.18.1-2.2,)"
+versionRange="[1.18.2-1.4.1,)" # Updated to match your Origins-Forge version
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.ascensionmod]]
 modId="mysticalchemy"
 mandatory=true
-versionRange="0.0.6"
+versionRange="[0.0.6,)" # Updated to allow newer versions
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.examplemod]] # Replace 'examplemod' with your mod's ID
-modId="dimensionaldepths" # The mod ID of 'Dimensional Depths'
-mandatory=true # Makes the dependency mandatory (your mod won't load without it)
-versionRange="0.4.3" # Optional: Specify a version range (e.g., 1.0 or higher)
-ordering="AFTER" # Load your mod after 'Dimensional Depths'
-side="BOTH" # The dependency is required on both client and server
+[[dependencies.ascensionmod]]
+modId="dimensionaldepths"
+mandatory=true
+versionRange="[0.4.3,)" # Updated to allow newer versions
+ordering="AFTER"
+side="BOTH"

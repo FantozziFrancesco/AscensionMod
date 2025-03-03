@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.example.ascensionmod.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "ascensionmod.refmap.json",
+  "mixins": [
+    // Add your Mixin classes here
+  ],
+  "client": [
+    // Client-side Mixins
+  ],
+  "server": [
+    // Server-side Mixins
+  ],
+  "minVersion": "0.8.5"
+}
