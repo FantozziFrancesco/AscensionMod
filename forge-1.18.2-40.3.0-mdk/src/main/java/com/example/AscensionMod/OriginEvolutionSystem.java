@@ -1,18 +1,19 @@
-package com.example.AscensionMod;
+package com.example.ascensionmod;
 
-import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.origin.OriginLayers;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import io.github.edwinmindcraft.origins.api.capabilities.IOriginContainer;
+import io.github.edwinmindcraft.origins.api.origin.Origin;
+import io.github.edwinmindcraft.origins.api.origin.OriginLayer;
+import io.github.edwinmindcraft.origins.api.origin.OriginLayers;
+import io.github.edwinmindcraft.origins.api.origin.OriginRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
 public class OriginEvolutionSystem {
+    public static void evolveOrigin(ServerPlayer player, ResourceLocation newOrigin) {
+        IOriginContainer component = player.getCapability(OriginsAPI.ORIGIN_CONTAINER).orElse(null);
+        OriginLayer layer = OriginLayers.getLayer(new ResourceLocation("ascensionmod", "origins"));
 
-    public static void evolveOrigin(ServerPlayerEntity player, Identifier newOrigin) {
-        OriginComponent component = ModComponents.ORIGIN.get(player);
-        OriginLayer layer = OriginLayers.getLayer(new Identifier("ascensionmod", "origins"));
-        if (layer != null) {
+        if (component != null && layer != null) {
             Origin origin = OriginRegistry.get(newOrigin);
             if (origin != null) {
                 component.setOrigin(layer, origin);

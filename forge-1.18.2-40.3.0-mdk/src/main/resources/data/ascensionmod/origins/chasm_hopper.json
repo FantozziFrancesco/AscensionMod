@@ -1,0 +1,15 @@
+{
+  "size": 0.75,
+  "max_health": 14,
+  "perpetual_effects": [
+    "ascensionmod:feather_falling_effect"
+  ],
+  "climbing": {
+    "enabled": true,
+    "limit": 6
+  },
+  "wall_jump": {
+    "enabled": true,
+    "limit": 2
+  }
+}

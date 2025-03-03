@@ -1,22 +1,52 @@
+# General mod information
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="${mod_license}"
-issueTrackerURL="https://github.com/yourusername/ascensionmod/issues"
+loaderVersion="[40,)"
+license="MIT"
+issueTrackerURL="https://github.com/YourUsername/YourMod/issues"
 
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
-authors="${mod_authors}"
+modId="yourmod"
+version="1.0.0"
+displayName="Your Mod"
+logoFile="yourmod_icon.png"
+authors="YourUsername"
 description='''
-${mod_description}
+This is your custom mod that adds new features to the game.
 '''
 
 # Dependencies
-[[dependencies.ascensionmod]]
+[[dependencies.yourmod]]
 modId="forge"
 mandatory=true
-versionRange="${forge_version_range}"
+versionRange="[40.2.3,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.yourmod]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18.2]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.yourmod]]
+modId="origins"
+mandatory=true
+versionRange="[1.18.2-1.5.0.2,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.yourmod]]
+modId="calio"
+mandatory=true
+versionRange="[1.18.1-1.4,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.yourmod]]
+modId="apoli"
+mandatory=true
+versionRange="[1.18.1-2.2,)"
 ordering="NONE"
 side="BOTH"
 

@@ -1,0 +1,15 @@
+{
+  "size": 0.5,
+  "max_health": 10,
+  "perpetual_effects": [
+    "minecraft:weakness"
+  ],
+  "climbing": {
+    "enabled": true,
+    "limit": 4
+  },
+  "wall_jump": {
+    "enabled": false,
+    "limit": 0
+  }
+}

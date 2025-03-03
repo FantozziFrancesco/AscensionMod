@@ -1,35 +1,20 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.41' // ForgeGradle for Minecraft 1.18.2
+    id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
 version = '1.0'
 group = 'com.example.ascensionmod'
 archivesBaseName = 'ascensionmod'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Java 17 for Minecraft 1.18.2
-
-repositories {
-    mavenCentral()
-    maven {
-        url = "https://maven.minecraftforge.net/"
-    }
-    maven {
-        url = "https://jitpack.io" // JitPack repository
-    }
-}
-
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.3.0' // Forge dependency for Minecraft 1.18.2
-    implementation 'com.github.apace100:origins-forge:ef51e7e798' // Example commit hash
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: '1.18.2'
     runs {
         client {
-            workingDirectory = file('run') // Set the working directory explicitly
+            workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -39,7 +24,7 @@ minecraft {
             }
         }
         server {
-            workingDirectory = file('run') // Set the working directory explicitly
+            workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
@@ -49,4 +34,28 @@ minecraft {
             }
         }
     }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://maven.minecraftforge.net/"
+    }
+    maven {
+        url = "https://jitpack.io" // For Origins API dependencies
+    }
+}
+
+dependencies {
+    // Forge dependency
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+
+    // Origins API dependency
+    implementation fg.deobf('com.github.EdwinMindcraft:origins-architectury:1.18.2-1.5.0.2')
+
+    // Calio dependency
+    implementation fg.deobf('com.github.EdwinMindcraft:calio:1.18.1-1.4')
+
+    // Apoli dependency
+    implementation fg.deobf('com.github.EdwinMindcraft:apoli:1.18.1-2.2')
 }

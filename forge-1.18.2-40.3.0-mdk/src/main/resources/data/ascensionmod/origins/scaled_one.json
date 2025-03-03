@@ -1,0 +1,15 @@
+{
+  "size": 1.0,
+  "max_health": 16,
+  "perpetual_effects": [
+    "minecraft:resistance"
+  ],
+  "climbing": {
+    "enabled": true,
+    "limit": 5
+  },
+  "wall_jump": {
+    "enabled": false,
+    "limit": 0
+  }
+}

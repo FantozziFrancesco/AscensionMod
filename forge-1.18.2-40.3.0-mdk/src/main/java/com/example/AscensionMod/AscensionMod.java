@@ -60,6 +60,8 @@ public class AscensionMod {
     public AscensionMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+
         // Register the deferred registers
         POTIONS.register(modEventBus);
 
@@ -68,12 +70,14 @@ public class AscensionMod {
 
         // Register Forge event bus
         MinecraftForge.EVENT_BUS.register(this);
-
-        ModOrigins.registerOrigins();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         // No brewing recipe needed here, as Mystic Alchemy handles it via JSON
+        // Register origins during setup
+        event.enqueueWork(() -> {
+            ModOrigins.registerOrigins();
+        });
     }
 
     // Event handler to check for potions with Luck and Blindness
