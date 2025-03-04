@@ -95,10 +95,10 @@ repositories {
         url = 'https://maven.parchmentmc.org' // Parchment Mappings
     }
     maven {
-        url 'https://maven.theillusivec4.top' // Origins-Forge API
+        url = 'https://maven.theillusivec4.top' // Origins-Forge API
     }
     maven {
-        url "https://cursemaven.com" // Optional: For additional mod dependencies
+        url = "https://cursemaven.com" // Optional: For additional mod dependencies
         content {
             includeGroup "curse.maven"
         }

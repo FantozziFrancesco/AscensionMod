@@ -46,6 +46,6 @@ side="BOTH"
 [[dependencies.ascensionmod]]
 modId="dimensionaldepths"
 mandatory=true
-versionRange="[0.4.3,)" # Updated to allow newer versions
+versionRange="[0.1.0,)" # Updated to allow newer versions
 ordering="AFTER"
 side="BOTH"
